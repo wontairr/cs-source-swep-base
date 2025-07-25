@@ -818,7 +818,6 @@ end
 
 local black = Color(0,0,0,255)
 local scopeMat = Material("hud/scope_full")
-local scopeCrosshairSize = 2
 
 function SWEP:DoDrawCrosshair(x,y)
 	if self:GetScopingIn() and self.ScopeDrawOverlay then
@@ -838,6 +837,13 @@ function SWEP:DoDrawCrosshair(x,y)
 		surface.DrawText("Accuracy: " .. acc)
 	end
 	return self.HideCrosshair
+end
+
+function SWEP:ShouldDrawViewModel()
+	if self:GetScopingIn() and self.ScopeDrawOverlay then
+		return false
+	end
+	return true
 end
 
 local overlay = Material("overlays/scope_lens")
