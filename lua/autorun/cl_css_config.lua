@@ -69,8 +69,14 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
 	spawnmenu.AddToolMenuOption("Options", "Counter-Strike: Source", "CSSWeaponsConfigureServer", "Server", "", "", function(panel)
         currentPanel = panel
 		panel:ClearControls()
-		panel:Help("Client Options")
+		panel:Help("Server Options")
 		panel:Help(" ")
+        if CSS_AuthenticPackInstalled then
+            cmd = "css_sv_weapon_compatibility"
+            MakeHelp(true)
+            panel:CheckBox("Compatibility Mode (Requires Reload)",cmd)
+            panel:Help(" ")
+        end
         cmd = "css_sv_weapons_use_arms"
         MakeHelp(true)
         panel:CheckBox("Use C-Arms (Requires Reload)",cmd)
