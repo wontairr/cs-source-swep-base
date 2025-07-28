@@ -71,6 +71,9 @@ CSSServerConvars = {
     weapons_drop                    = CreateConVar("css_sv_weapons_drop_on_death","0",ARCHIVED_REPLICATED,
     "If set to 1, players will drop CS:S weapons on death.",0,1),
 
+    weapons_autoswitch              = CreateConVar("css_sv_weapons_autoswitch","1",ARCHIVED_REPLICATED,
+    "If set to 1, whenever you pickup a rifle or similar, you will autoswitch to it.",0,1),
+
     weapons_alt_viewpunch           = CreateConVar("css_sv_weapons_alt_viewpunch","0",ARCHIVED_REPLICATED,
     "If set to 1, CS:S weapons will use an alternative viewpunch that may be more or less authentic, depending on what you think.",0,1),
 

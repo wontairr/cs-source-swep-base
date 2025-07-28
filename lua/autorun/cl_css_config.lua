@@ -91,6 +91,12 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         panel:Help(" ")
         panel:Help("-----")
         panel:Help(" ")
+        
+        cmd = "css_sv_weapons_autoswitch"
+        MakeHelp(true)
+        panel:CheckBox("Auto Switch",cmd)
+        panel:Help(" ")
+
         cmd = "css_sv_weapons_drop_on_death"
         MakeHelp(true)
         panel:CheckBox("Drop Weapons",cmd)

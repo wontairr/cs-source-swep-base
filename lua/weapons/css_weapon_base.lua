@@ -191,6 +191,14 @@ function SWEP:Equip(owner)
 
 	owner:EmitSound("items/itempickup.wav",100,100,1,CHAN_ITEM,SND_NOFLAGS,0)
 
+	if CSSServerConvars.weapons_autoswitch:GetBool() 
+	and self.Type
+	and self.Type != CSS_Pistol 
+	and self.Type != CSS_Utility 
+	and self.Type != CSS_Misc then
+		owner:SelectWeapon(self:GetClass())
+	end
+
 	self:PostEquip(owner)
 
 	return true
