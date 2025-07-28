@@ -312,8 +312,9 @@ function SWEP:PostDrop(ownerOverride,remakeEnt) end
 	PRIMARY ATTACK
 
 ]]
-
+SWEP.NextFire = 0 -- NPC ONLY
 function SWEP:CanPrimaryAttack()
+	if ( self:GetOwner():IsNPC() and CurTime() < self.NextFire ) then return end
 
 	if ( self:Clip1() <= 0 ) then
 		if self.Type and self.Type == CSS_Pistol then
@@ -361,6 +362,7 @@ function SWEP:PostCanPrimaryAttack()
 		self:ShootBullet(self.Primary.Damage,self.Primary.Bullets,self:GetAccuracyFloat(),self:DoRecoil(),self.Primary.Distance)
 		self:SetNextEmptyCheck()
 	end
+	if self:GetOwner():IsNPC() then self.NextFire = CurTime() + self.Primary.Delay end
 	
 	-- Put after shot so that the accuracy is kept.
 	if (CSSServerConvars.weapons_sniper_unscopeaftershot:GetBool() and not self.StayScopedAfterShot) and wasScoping then
