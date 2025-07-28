@@ -65,13 +65,16 @@ CSSServerConvars = {
     weapons_damage_multiplier       = CreateConVar("css_sv_weapons_damage_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all weapon damage.",0,10),
 
+    weapons_force_multiplier       = CreateConVar("css_sv_weapons_force_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all weapon force.",0,10),
+
     weapons_drop                    = CreateConVar("css_sv_weapons_drop_on_death","0",ARCHIVED_REPLICATED,
     "If set to 1, players will drop CS:S weapons on death.",0,1),
 
     weapons_alt_viewpunch           = CreateConVar("css_sv_weapons_alt_viewpunch","0",ARCHIVED_REPLICATED,
     "If set to 1, CS:S weapons will use an alternative viewpunch that may be more or less authentic, depending on what you think.",0,1),
 
-
+    
 
     flashbang_blindtime_multiplier  = CreateConVar("css_sv_flashbang_blindtime_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier for the blind time of the flashbang.",0.0,1.0),

@@ -103,6 +103,10 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         MakeHelp()
         panel:NumSlider("Damage Multiplier",cmd,0,10,2)
         panel:Help(" ")
+        cmd = "css_sv_weapons_force_multiplier"
+        MakeHelp()
+        panel:NumSlider("Force Multiplier",cmd,0,10,2)
+        panel:Help(" ")
         cmd = "css_sv_weapons_alt_viewpunch"
         MakeHelp(true)
         panel:CheckBox("Alternate ViewPunch",cmd)

@@ -415,9 +415,10 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	bullet.Tracer	= tracer 	or 0
 	bullet.Force	= force  	or self.Primary.Force
 	bullet.Damage	= damage	or self.Primary.Damage
-	bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
 	bullet.AmmoType = ammo_type or self.Primary.Ammo
 	
+	bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
+	bullet.Force = bullet.Force * CSSServerConvars.weapons_force_multiplier:GetFloat()
 	-- Big nasty debug code.
 	if CSSServerConvars.weapons_spray_debug:GetBool() and self.SprayPattern[1] != "none" then
 		if (self.NextEmptyCheck != -1 and CurTime() >= self.NextEmptyCheck) or not self.FirstShot then
