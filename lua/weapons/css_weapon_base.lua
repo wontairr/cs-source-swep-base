@@ -118,12 +118,17 @@ function SWEP:Think()
 	end
 	if event == self.Event.Idle then
 		self:SendWeaponAnim(ACT_VM_IDLE)
-		if self.IdleEnd then self:IdleEnd() end
 	end
-
-
+	
+	
 	self:SetEvent(-1)
+	if event == self.Event.Idle then
+		self:IdleEnd()
+	end
 end
+
+-- Override.
+function SWEP:IdleEnd() end
 
 -- Override.
 function SWEP:Think2() end
@@ -235,6 +240,10 @@ function SWEP:Deploy()
 		local filter = RecipientFilter()
 		filter:AddPlayer(owner)
 		self:EmitSound(self.DeploySound,nil,nil,nil,nil,nil,nil,filter)
+	end
+
+	if self.AutoIdle then
+		self:DelayedEvent(self.Event.Idle,self:SequenceDuration(ACT_VM_DEPLOY) + self.AutoIdleDelay)
 	end
 
 	self:PostDeploy()
@@ -377,6 +386,10 @@ function SWEP:PostCanPrimaryAttack()
 		self:ResetScoping(true)
 	end	
 	
+	
+	if self.AutoIdle then
+		self:DelayedEvent(self.Event.Idle,self:SequenceDuration() + self.AutoIdleDelay)
+	end
 	
 	self:AfterPrimaryAttack()
 end
@@ -527,6 +540,11 @@ function SWEP:Reload(override)
 	self:DefaultReload(self:GetSilenced() and ACT_VM_RELOAD_SILENCED or ACT_VM_RELOAD)
 
 	self:SetReloading(true)
+
+	
+	if self.AutoIdle then
+		self:DelayedEvent(self.Event.Idle,self:SequenceDuration() + self.AutoIdleDelay)
+	end
 
 	self:PostReload()
 end
