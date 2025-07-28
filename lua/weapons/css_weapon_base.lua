@@ -311,6 +311,26 @@ function SWEP:PostDrop(ownerOverride,remakeEnt) end
 
 ]]
 
+function SWEP:CanPrimaryAttack()
+
+	if ( self:Clip1() <= 0 ) then
+		if self.Type and self.Type == CSS_Pistol then
+			self:EmitSound( "Default.ClipEmpty_Pistol" )
+		else
+			self:EmitSound( "Default.ClipEmpty_Rifle" )
+		end
+		self:SetNextPrimaryFire( CurTime() + 0.2 )
+		if self:GetOwner():KeyPressed(IN_ATTACK) then
+			self:Reload(true)
+		end
+		return false
+
+	end
+
+	return true
+
+end
+
 function SWEP:PostCanPrimaryAttack()
 	self:BeforePrimaryAttack()
 
@@ -487,8 +507,8 @@ function SWEP:CanReload()
 	   and self:GetOwner():KeyPressed(IN_RELOAD)
 end
 
-function SWEP:Reload()
-	if not self:CanReload() then return end
+function SWEP:Reload(override)
+	if not self:CanReload() and not override then return end
 	self:ResetScoping()
 	self:DefaultReload(self:GetSilenced() and ACT_VM_RELOAD_SILENCED or ACT_VM_RELOAD)
 
