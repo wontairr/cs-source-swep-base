@@ -182,8 +182,10 @@ function SWEP:PostRemove() end
 function SWEP:Equip(owner)
 	self:SetHoldType(self.HoldType)
 
-	if SERVER and not self:GetBeenPickedUp() and engine.ActiveGamemode() == "sandbox" and CSSServerConvars.weapons_give_ammo_sandbox:GetBool() then
-		owner:GiveAmmo(self.Primary.DefaultClip,self.Primary.Ammo,false)
+	if SERVER and not self:GetBeenPickedUp() then
+		if not owner:IsNPC() and engine.ActiveGamemode() == "sandbox" and CSSServerConvars.weapons_give_ammo_sandbox:GetBool() then
+			owner:GiveAmmo(self.Primary.DefaultClip,self.Primary.Ammo,false)
+		end
 		self:SetBeenPickedUp(true)
 	end
 
@@ -218,7 +220,7 @@ function SWEP:Deploy()
 
 	self:SendWeaponAnim(self:GetSilenced() and ACT_VM_DRAW_SILENCED or ACT_VM_DRAW)
 	local owner = self:GetOwner()
-	if IsValid(owner) then
+	if IsValid(owner) and not owner:IsNPC() then
 		owner:SetCanZoom(false)
 	end
 	if self.DeploySound and SERVER then
@@ -242,7 +244,7 @@ function SWEP:Holster(weapon)
 		self:SetEvent(-1)
 	end
 	local owner = self:GetOwner()
-	if IsValid(owner) then
+	if IsValid(owner) and not owner:IsNPC() then
 		owner:SetCanZoom(true)
 	end
 
@@ -413,6 +415,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	bullet.Spread	= spread
 	bullet.Distance = distance 	or 56756
 	bullet.Tracer	= tracer 	or 0
+	if owner:IsNPC() then bullet.Tracer = 1 end
 	bullet.Force	= force  	or self.Primary.Force
 	bullet.Damage	= damage	or self.Primary.Damage
 	bullet.AmmoType = ammo_type or self.Primary.Ammo
@@ -547,22 +550,26 @@ function SWEP:GetAccuracyFloat()
     local owner = self:GetOwner()
     local acc = self.Accuracy
     local spread = acc.Spread
+	local walkSpeed = 80
+	if not owner:IsNPC() then walkSpeed = owner:GetWalkSpeed() end
 	if self.Shotgun then return spread end
 
     if not owner:OnGround() and owner:GetMoveType() != MOVETYPE_NOCLIP then
 		spread = spread + acc.Jump
 	end
-    if owner:GetVelocity():Length() >= owner:GetWalkSpeed() /1.5 then
+    if owner:GetVelocity():Length() >= walkSpeed/1.5 then
 		spread = spread + acc.Move
 
 	end
 
-    if owner:Crouching() then
-        spread = spread + acc.Crouch 
-
-    elseif not owner:Crouching() and owner:OnGround() then
-        spread = spread + acc.Stand
-    end
+	if not owner:IsNPC() then		
+		if owner:Crouching() then
+			spread = spread + acc.Crouch 
+	
+		elseif not owner:Crouching() and owner:OnGround() then
+			spread = spread + acc.Stand
+		end
+	end
 
     if owner:GetMoveType() == MOVETYPE_LADDER then spread = spread + acc.Ladder end
 
@@ -573,6 +580,7 @@ end
 
 -- There are alot of magic numbers here but I literally don't know how CS:S does it so its all perceptive.
 function SWEP:ViewPunch(owner,angle)
+	if owner:IsNPC() then return end
 	if not self.Recoil or noViewPunch then return end
 
 	local viewPunch = Angle(angle.x,angle.y,0)
@@ -597,7 +605,7 @@ function SWEP:DoRecoil(noViewPunch)
     local owner = self:GetOwner()
 	if noViewPunch == nil then noViewPunch = false end
 
-    if not IsValid(owner) then return angle_zero end
+    if not IsValid(owner) or owner:IsNPC() then return angle_zero end
 
 	if self.SprayPattern[1] == "none" then self:ViewPunch(owner,angle_zero) return angle_zero end
 
@@ -724,7 +732,7 @@ function SWEP:ResetScoping(returnAfterShot)
 		self:SetAccuracy("AccuracyUnScoped")
 	end
 	local owner = self:GetOwner()
-    if IsValid(owner) then
+    if IsValid(owner) and not owner:IsNPC() then
         owner:SetFOV(0,self.ScopingTime)
 		if returnAfterShot then
 			self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)

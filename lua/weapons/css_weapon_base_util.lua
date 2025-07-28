@@ -200,7 +200,7 @@ function SWEP:ResetVariables(dontResetDropped,dontClearSafeTimers)
 	self.ShotgunReloading = false
 
 	local owner = self:GetOwner()
-	if IsValid(owner) then
+	if IsValid(owner) and not owner:IsNPC() then
 		owner:SetCanZoom(true)
 	end
 	self.BurstLeft = 0
