@@ -334,14 +334,16 @@ function SWEP:CanPrimaryAttack()
 	if ( self:GetOwner():IsNPC() and CurTime() < self.NextFire ) then return end
 
 	if ( self:Clip1() <= 0 ) then
-		if self.Type and self.Type == CSS_Pistol then
-			self:EmitSound( "Default.ClipEmpty_Pistol" )
-		else
-			self:EmitSound( "Default.ClipEmpty_Rifle" )
-		end
-		self:SetNextPrimaryFire( CurTime() + 0.2 )
+		self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
 		if self:GetOwner():KeyPressed(IN_ATTACK) then
-			self:Reload(true)
+			if self.Type and self.Type == CSS_Pistol then
+				self:EmitSound( "Default.ClipEmpty_Pistol" )
+			else
+				self:EmitSound( "Default.ClipEmpty_Rifle" )
+			end
+			if self:Ammo1() > 0 then
+				self:Reload(true)
+			end
 		end
 		return false
 
@@ -367,7 +369,7 @@ function SWEP:PostCanPrimaryAttack()
 		end
 	else		
 		self:TakePrimaryAmmo(self.Primary.BulletTake)
-		self:EmitSound(self:GetSound("PrimaryFire"),140,100,1,(self:Clip1() > 0 and CHAN_WEAPON or CHAN_AUTO))
+		self:EmitSound(self:GetSound("PrimaryFire"))
 		
 		self:SendAnimation(self:GetAnimation("Fire"),PLAYER_ATTACK1)
 		if wasScoping and not self.StayScopedAfterShot then
@@ -672,7 +674,7 @@ SWEP.BurstNext = 0
 function SWEP:BurstShoot()
 	
 	self:TakePrimaryAmmo(self.Primary.BulletTake)
-	self:EmitSound(self:GetSound("PrimaryFire"),140,100,1,(self:Clip1() > 0 and CHAN_WEAPON or CHAN_AUTO))
+	self:EmitSound(self:GetSound("PrimaryFire"))
 
 	self:SendAnimation(self:GetAnimation("Fire"),PLAYER_ATTACK1)
 
