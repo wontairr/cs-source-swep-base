@@ -71,9 +71,11 @@ include("weapons/css_weapon_base_util.lua")
 
 function SWEP:Think()
 	self:Think2()
+	local owner = self:GetOwner()
+	if not IsValid(owner) then return end
 	-- Drop
 	if CLIENT then
-		if not self.DontDrop and self:GetOwner() == LocalPlayer() and input.IsButtonDown(CSSClientConvars.drop_bind:GetInt()) 
+		if not self.DontDrop and owner == LocalPlayer() and input.IsButtonDown(CSSClientConvars.drop_bind:GetInt()) 
 		and not self:GetOwner():IsTyping() and not gui.IsConsoleVisible() and not self:GetDropped() then
 			self:SetDropped(true)
 			net.Start("toServer_CSSDropWeapon")
@@ -87,6 +89,12 @@ function SWEP:Think()
 			self.LastBullet = 1
 		end
 	end
+
+	-- Reload on releasing left click
+	if owner:KeyReleased(IN_ATTACK) and self:Clip1() <= 0 then
+		self:Reload(2)
+	end
+
 	
 	-- Events
 	local event = self:GetEvent()
@@ -334,7 +342,6 @@ function SWEP:CanPrimaryAttack()
 	if ( self:GetOwner():IsNPC() and CurTime() < self.NextFire ) then return end
 
 	if ( self:Clip1() <= 0 ) then
-		self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
 		if self:GetOwner():KeyPressed(IN_ATTACK) then
 			if self.Type and self.Type == CSS_Pistol then
 				self:EmitSound( "Default.ClipEmpty_Pistol" )
@@ -342,8 +349,9 @@ function SWEP:CanPrimaryAttack()
 				self:EmitSound( "Default.ClipEmpty_Rifle" )
 			end
 			if self:Ammo1() > 0 then
-				self:Reload(true)
+				self:Reload(1)
 			end
+			self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
 		end
 		return false
 
@@ -528,16 +536,26 @@ function SWEP:AttachSilencer()
 	self:DelayedEvent(self.Event.Silence,self.SilencingTime)
 end
 
-
-function SWEP:CanReload()
+-- override == 1 means override all canreload conditions
+-- override == 2 means override just the press reload condition
+function SWEP:CanReload(override)
+	local keyPress = self:GetOwner():KeyPressed(IN_RELOAD)
+	if override != nil then
+		if override == 2 then
+			keyPress = true
+		else
+			return true
+		end
+	end
 	return self:Clip1() < self:GetMaxClip1() 
 	   and self:Ammo1() > 0 
 	   and CurTime() > self:GetNextPrimaryFire() 
-	   and self:GetOwner():KeyPressed(IN_RELOAD)
+	   and keyPress
 end
 
 function SWEP:Reload(override)
-	if not self:CanReload() and not override then return end
+	if not self:CanReload(override) then return end
+
 	self:ResetScoping()
 	self:DefaultReload(self:GetSilenced() and ACT_VM_RELOAD_SILENCED or ACT_VM_RELOAD)
 
