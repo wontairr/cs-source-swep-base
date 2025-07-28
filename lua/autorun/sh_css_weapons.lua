@@ -51,7 +51,7 @@ CSSServerConvars = {
     "Makes weapons give a little reserve ammo when spawning them in Sandbox.",0,1),
     weapons_infinite_grenades       = CreateConVar("css_sv_weapons_infinite_grenades","0",ARCHIVED_REPLICATED,
     "Grenades wont be removed when thrown if set to 1.",0,1),
-    weapons_pistols_automatic       = CreateConVar("css_sv_weapons_pistols_automatic","1",ARCHIVED_REPLICATED,
+    weapons_pistols_automatic       = CreateConVar("css_sv_weapons_pistols_automatic","0",ARCHIVED_REPLICATED,
     "Pistols are automatic (and more responsive) when set to 1."),
     weapons_sandbox_slots           = CreateConVar("css_sv_weapons_sandbox_slots","1",ARCHIVED_REPLICATED,
     "If set to 1, weapons will be organized more conveniently for sandbox. Otherwise, they will be in the default CS:S slot positions."),
