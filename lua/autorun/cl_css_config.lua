@@ -105,14 +105,39 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         MakeHelp(true)
         panel:CheckBox("Give ammo on pickup",cmd)
         panel:Help(" ")
+        panel:Help("----")
+
         cmd = "css_sv_weapons_damage_multiplier"
         MakeHelp()
         panel:NumSlider("Damage Multiplier",cmd,0,10,2)
         panel:Help(" ")
+        cmd = "css_sv_weapons_rifle_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("Rifle Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_smg_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("SMG Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_pistol_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("Pistol Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_shotgun_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("Shotgun Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_sniper_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("Sniper Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+        
+        
         cmd = "css_sv_weapons_force_multiplier"
         MakeHelp()
         panel:NumSlider("Force Multiplier",cmd,0,10,2)
         panel:Help(" ")
+        panel:Help("----")
         cmd = "css_sv_weapons_alt_viewpunch"
         MakeHelp(true)
         panel:CheckBox("Alternate ViewPunch",cmd)

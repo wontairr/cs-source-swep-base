@@ -65,6 +65,17 @@ CSSServerConvars = {
     weapons_damage_multiplier       = CreateConVar("css_sv_weapons_damage_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all weapon damage.",0,10),
 
+    weapons_rifle_damage_multiplier       = CreateConVar("css_sv_weapons_rifle_damage_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all rifle damage.",0,10),
+    weapons_smg_damage_multiplier       = CreateConVar("css_sv_weapons_smg_damage_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all smg damage.",0,10),
+    weapons_pistol_damage_multiplier       = CreateConVar("css_sv_weapons_pistol_damage_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all pistol damage.",0,10),
+    weapons_shotgun_damage_multiplier       = CreateConVar("css_sv_weapons_shotgun_damage_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all shotgun damage.",0,10),
+    weapons_sniper_damage_multiplier       = CreateConVar("css_sv_weapons_sniper_damage_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplier of all sniper damage.",0,10),
+
     weapons_force_multiplier       = CreateConVar("css_sv_weapons_force_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all weapon force.",0,10),
 

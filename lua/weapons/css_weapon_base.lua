@@ -430,6 +430,14 @@ local red = Color(255,0,0,255)
 local gray = Color(187,187,187,20)
 local lerpColor = Color(255,0,0,255)
 local debugMin,debugMax = Vector(-1,-1,-1),Vector(1,1,1)
+
+local damageMultiplier = {
+	CSSServerConvars.weapons_rifle_damage_multiplier,
+	CSSServerConvars.weapons_pistol_damage_multiplier,
+	CSSServerConvars.weapons_smg_damage_multiplier,
+	CSSServerConvars.weapons_shotgun_damage_multiplier,
+	CSSServerConvars.weapons_sniper_damage_multiplier,
+} 
 function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst, ammo_type, force, tracer)
 	
 	local owner = self:GetOwner()
@@ -452,8 +460,12 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	bullet.Force	= force  	or self.Primary.Force
 	bullet.Damage	= damage	or self.Primary.Damage
 	bullet.AmmoType = ammo_type or self.Primary.Ammo
-	
+
+	-- Apply specific damage multiplier.
+	bullet.Damage = bullet.Damage * damageMultiplier[self.Type]:GetFloat()
+	-- Apply base damage multiplier.
 	bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
+	
 	bullet.Force = bullet.Force * CSSServerConvars.weapons_force_multiplier:GetFloat()
 	-- Big nasty debug code.
 	if CSSServerConvars.weapons_spray_debug:GetBool() and self.SprayPattern[1] != "none" then
