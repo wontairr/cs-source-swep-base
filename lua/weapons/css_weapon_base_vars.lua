@@ -114,6 +114,8 @@ SWEP.Event = {
 SWEP.AutoIdle = false
 SWEP.AutoIdleDelay = 1
 
+
+
 local dev = GetConVar("developer")
 
 function SWEP:SetupDataTables()

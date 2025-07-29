@@ -462,7 +462,9 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	bullet.AmmoType = ammo_type or self.Primary.Ammo
 
 	-- Apply specific damage multiplier.
-	bullet.Damage = bullet.Damage * damageMultiplier[self.Type]:GetFloat()
+	if self.Type and damageMultiplier[self.Type] then
+		bullet.Damage = bullet.Damage * damageMultiplier[self.Type]:GetFloat()
+	end
 	-- Apply base damage multiplier.
 	bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
 	
