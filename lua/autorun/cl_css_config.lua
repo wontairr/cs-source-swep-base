@@ -2,7 +2,6 @@ if SERVER then return end
 local currentPanel = nil
 local cmd = ""
 local function MakeHelp(human)
-    print(cmd)
     local cmdHelp = GetConVar(cmd):GetHelpText()
     if human then
         cmdHelp = string.Replace(cmdHelp,"1","checked")
@@ -92,10 +91,14 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         panel:Help(" ")
         panel:Help("-----")
         panel:Help(" ")
-        
+
         cmd = "css_sv_weapons_autoswitch"
         MakeHelp(true)
         panel:CheckBox("Auto Switch",cmd)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_lock_counts"
+        MakeHelp(true)
+        panel:CheckBox("Lock weapon amounts",cmd)
         panel:Help(" ")
 
         cmd = "css_sv_weapons_drop_on_death"

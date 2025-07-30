@@ -93,7 +93,8 @@ CSSServerConvars = {
     weapons_alt_viewpunch           = CreateConVar("css_sv_weapons_alt_viewpunch","0",ARCHIVED_REPLICATED,
     "If set to 1, CS:S weapons will use an alternative viewpunch that may be more or less authentic, depending on what you think.",0,1),
 
-    
+    weapons_lock_counts             = CreateConVar("css_sv_weapons_lock_counts","0",ARCHIVED_REPLICATED,
+    "If set to 1, you can only hold one primary or secondary.",0,1),
 
     flashbang_blindtime_multiplier  = CreateConVar("css_sv_flashbang_blindtime_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier for the blind time of the flashbang.",0.0,1.0),
@@ -175,3 +176,17 @@ cvars.AddChangeCallback("css_sv_debug_weapon_spray",function(c,o,n)
     end
 end,"css_sv_debugspray_change")
 
+local primary = {
+    [CSS_Rifle] = true, 
+    [CSS_Sniper] = true,
+    [CSS_Shotgun] = true,
+    [CSS_Smg] = true,
+}
+
+hook.Add( "PlayerCanPickupWeapon", "CSSSinglePickup", function( ply, newWep )
+    if newWep.CSSWeapon and newWep.Type and CSSServerConvars.weapons_lock_counts:GetBool() and not ply:HasWeapon( newWep:GetClass() ) then
+		for _, wep in ipairs(ply:GetWeapons()) do
+            if wep.Type and ((primary[wep.Type] and primary[newWep.Type]) or (wep.Type == CSS_Pistol and newWep.Type == CSS_Pistol)) then return false end
+        end
+	end
+end )
