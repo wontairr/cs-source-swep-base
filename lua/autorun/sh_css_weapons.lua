@@ -96,6 +96,9 @@ CSSServerConvars = {
     weapons_lock_counts             = CreateConVar("css_sv_weapons_lock_counts","0",ARCHIVED_REPLICATED,
     "If set to 1, you can only hold one primary or secondary.",0,1),
 
+    weapons_player_slowing          = CreateConVar("css_sv_weapons_player_slowing","0",ARCHIVED_REPLICATED,
+    "If set to 1, player movement speed will be affected by whatever weapon they're holding. If set to 2, sprinting speed will be clamped to walking speed.",0,2),
+
     flashbang_blindtime_multiplier  = CreateConVar("css_sv_flashbang_blindtime_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier for the blind time of the flashbang.",0.0,1.0),
     flashbang_blind_maxalpha        = CreateConVar("css_sv_flashbang_blind_maxalpha","255",ARCHIVED_REPLICATED,

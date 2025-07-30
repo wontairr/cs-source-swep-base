@@ -202,6 +202,15 @@ function SWEP:ResetVariables(dontResetDropped,dontClearSafeTimers)
 	local owner = self:GetOwner()
 	if IsValid(owner) and not owner:IsNPC() then
 		owner:SetCanZoom(true)
+		if SERVER then
+			local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
+			if speedType == 1 then
+				owner:SetWalkSpeed(self.OGWalkSpeed)
+			elseif speedType == 2 then
+				owner:SetWalkSpeed(self.OGWalkSpeed)
+				owner:SetRunSpeed(self.OGRunSpeed)
+			end
+		end
 	end
 	self.BurstLeft = 0
 	self.BurstNext = 0

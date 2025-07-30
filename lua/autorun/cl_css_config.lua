@@ -92,6 +92,11 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         panel:Help("-----")
         panel:Help(" ")
 
+        cmd = "css_sv_weapons_player_slowing"
+        MakeHelp()
+        panel:NumSlider("Weapon Player Slowing",cmd,0,2,0)
+        panel:Help(" ")
+
         cmd = "css_sv_weapons_autoswitch"
         MakeHelp(true)
         panel:CheckBox("Auto Switch",cmd)

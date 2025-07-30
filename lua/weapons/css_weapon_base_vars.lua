@@ -66,7 +66,7 @@ SWEP.LastBullet = 1
 
 SWEP.SafeTimers = {}
 
-SWEP.MaxPlayerSpeed = 221
+SWEP.MaxPlayerSpeed = 250
 
 SWEP.Recoil = true -- If false the gun wont do any viewpunch
 

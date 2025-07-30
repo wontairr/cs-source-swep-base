@@ -40,6 +40,8 @@ SWEP.ViewmodelRightHanded = false
 SWEP.BounceWeaponIcon  = false 
 SWEP.DrawWeaponInfoBox = false
 SWEP.SwayScale = 0.5
+SWEP.OGWalkSpeed = 200
+SWEP.OGRunSpeed  = 240
 
 
 include("weapons/css_weapon_base_vars.lua")
@@ -243,6 +245,15 @@ function SWEP:Deploy()
 	local owner = self:GetOwner()
 	if IsValid(owner) and not owner:IsNPC() then
 		owner:SetCanZoom(false)
+		self.OGWalkSpeed = owner:GetWalkSpeed()
+		self.OGRunSpeed = owner:GetRunSpeed()
+		local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
+		if speedType == 1 then
+			owner:SetWalkSpeed(self.MaxPlayerSpeed)
+		elseif speedType == 2 then
+			owner:SetWalkSpeed(self.MaxPlayerSpeed)
+			owner:SetRunSpeed(self.MaxPlayerSpeed)
+		end
 	end
 	if self.DeploySound and SERVER then
 		local filter = RecipientFilter()
@@ -267,10 +278,6 @@ function SWEP:Holster(weapon)
 	if IsFirstTimePredicted() then
 		self:ResetVariables()
 		self:SetEvent(-1)
-	end
-	local owner = self:GetOwner()
-	if IsValid(owner) and not owner:IsNPC() then
-		owner:SetCanZoom(true)
 	end
 
 	self:PostHolster(weapon)
