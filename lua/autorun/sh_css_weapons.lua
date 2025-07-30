@@ -76,8 +76,13 @@ CSSServerConvars = {
     weapons_sniper_damage_multiplier       = CreateConVar("css_sv_weapons_sniper_damage_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all sniper damage.",0,10),
 
-    weapons_force_multiplier       = CreateConVar("css_sv_weapons_force_multiplier","1",ARCHIVED_REPLICATED,
+    weapons_force_multiplier        = CreateConVar("css_sv_weapons_force_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all weapon force.",0,10),
+
+    weapons_npc_accuracy            = CreateConVar("css_sv_weapons_npc_accuracy","0.7",ARCHIVED_REPLICATED,
+    "For NPCs only: 0.0 is poor accuracy, 1.0 is perfect accuracy.",0.0,1.0),
+    weapons_npc_damage_multiplier   = CreateConVar("css_sv_weapons_npc_damage_multiplier","1.0",ARCHIVED_REPLICATED,
+    "Multiplier of damage for weapons held by NPCs",0.0,10),
 
     weapons_drop                    = CreateConVar("css_sv_weapons_drop_on_death","0",ARCHIVED_REPLICATED,
     "If set to 1, players will drop CS:S weapons on death.",0,1),

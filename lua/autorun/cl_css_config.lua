@@ -2,6 +2,7 @@ if SERVER then return end
 local currentPanel = nil
 local cmd = ""
 local function MakeHelp(human)
+    print(cmd)
     local cmdHelp = GetConVar(cmd):GetHelpText()
     if human then
         cmdHelp = string.Replace(cmdHelp,"1","checked")
@@ -137,6 +138,16 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         MakeHelp()
         panel:NumSlider("Force Multiplier",cmd,0,10,2)
         panel:Help(" ")
+
+        cmd = "css_sv_weapons_npc_accuracy"
+        MakeHelp()
+        panel:NumSlider("NPC Accuracy",cmd,0.0,1.0,2)
+        panel:Help(" ")
+        cmd = "css_sv_weapons_npc_damage_multiplier"
+        MakeHelp()
+        panel:NumSlider("NPC Weapon Damage Multiplier",cmd,0,10,2)
+        panel:Help(" ")
+
         panel:Help("----")
         cmd = "css_sv_weapons_alt_viewpunch"
         MakeHelp(true)

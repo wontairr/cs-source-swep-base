@@ -441,14 +441,24 @@ local damageMultiplier = {
 function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst, ammo_type, force, tracer)
 	
 	local owner = self:GetOwner()
-	
-	local eyeDir = owner:EyeAngles()
+	if not IsValid(owner) then return end
+	local npc = owner:IsNPC()
+	local eyeDir = owner:GetAimVector():Angle()
+	if npc then
+		local enemy = owner:GetEnemy()
+		if IsValid(enemy) then
+			local dir = enemy:GetPos()
+			dir:Sub(owner:GetPos())
+			dir:Normalize()
+			eyeDir = LerpAngle(1.0 - CSSServerConvars.weapons_npc_accuracy:GetFloat(),dir:Angle(),eyeDir)
+		end
+	end
 	eyeDir:Add(Angle(direction.x,direction.y * (self:GetSprayXSwap() and -1 or 1),0))
 	
 	local spread = burst != nil and VectorRand(0,aimcone) or Vector( aimcone, aimcone, 0 )
 	if burst != nil then spread.z = 0 end
-	
-	
+
+
     local bullet = {}
     bullet.Num     	= num_bullets
 	bullet.Dir     	= eyeDir:Forward()  -- Affected by spray pattern
@@ -456,7 +466,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	bullet.Spread	= spread
 	bullet.Distance = distance 	or 56756
 	bullet.Tracer	= tracer 	or 0
-	if owner:IsNPC() then bullet.Tracer = 1 end
+	if npc then bullet.Tracer = 1 end
 	bullet.Force	= force  	or self.Primary.Force
 	bullet.Damage	= damage	or self.Primary.Damage
 	bullet.AmmoType = ammo_type or self.Primary.Ammo
@@ -466,7 +476,11 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 		bullet.Damage = bullet.Damage * damageMultiplier[self.Type]:GetFloat()
 	end
 	-- Apply base damage multiplier.
-	bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
+	if npc then
+		bullet.Damage = bullet.Damage * CSSServerConvars.weapons_npc_damage_multiplier:GetFloat()
+	else
+		bullet.Damage = bullet.Damage * CSSServerConvars.weapons_damage_multiplier:GetFloat()
+	end
 	
 	bullet.Force = bullet.Force * CSSServerConvars.weapons_force_multiplier:GetFloat()
 	-- Big nasty debug code.
@@ -636,7 +650,6 @@ function SWEP:GetAccuracyFloat()
     if owner:GetMoveType() == MOVETYPE_LADDER then spread = spread + acc.Ladder end
 
     local retVal = math.Clamp(spread,acc.Spread,acc.Maximum)
-
     return retVal 
 end
 
