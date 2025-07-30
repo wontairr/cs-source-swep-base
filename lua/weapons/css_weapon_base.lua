@@ -438,6 +438,8 @@ local damageMultiplier = {
 	CSSServerConvars.weapons_shotgun_damage_multiplier,
 	CSSServerConvars.weapons_sniper_damage_multiplier,
 } 
+-- This helps with NPC aiming (i hope)
+local eyeMargin = Vector(0,0,10)
 function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst, ammo_type, force, tracer)
 	
 	local owner = self:GetOwner()
@@ -448,6 +450,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 		local enemy = owner:GetEnemy()
 		if IsValid(enemy) then
 			local dir = enemy:GetPos()
+			dir:Add(eyeMargin)
 			dir:Sub(owner:GetPos())
 			dir:Normalize()
 			eyeDir = LerpAngle(1.0 - CSSServerConvars.weapons_npc_accuracy:GetFloat(),dir:Angle(),eyeDir)
