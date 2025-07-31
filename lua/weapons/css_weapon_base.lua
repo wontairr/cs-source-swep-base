@@ -198,7 +198,7 @@ function SWEP:Equip(owner)
 	self:SetHoldType(self.HoldType)
 
 	if SERVER and not self:GetBeenPickedUp() then
-		if not owner:IsNPC() and engine.ActiveGamemode() == "sandbox" and CSSServerConvars.weapons_give_ammo_sandbox:GetBool() then
+		if not self:IsOwnerNPC(owner) and engine.ActiveGamemode() == "sandbox" and CSSServerConvars.weapons_give_ammo_sandbox:GetBool() then
 			owner:GiveAmmo(self.Primary.DefaultClip,self.Primary.Ammo,false)
 		end
 		self:SetBeenPickedUp(true)
@@ -243,7 +243,7 @@ function SWEP:Deploy()
 
 	self:SendWeaponAnim(self:GetSilenced() and ACT_VM_DRAW_SILENCED or ACT_VM_DRAW)
 	local owner = self:GetOwner()
-	if IsValid(owner) and not owner:IsNPC() then
+	if IsValid(owner) and not self:IsOwnerNPC(owner) then
 		owner:SetCanZoom(false)
 		self.OGWalkSpeed = owner:GetWalkSpeed()
 		self.OGRunSpeed = owner:GetRunSpeed()
@@ -451,7 +451,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 	
 	local owner = self:GetOwner()
 	if not IsValid(owner) then return end
-	local npc = owner:IsNPC()
+	local npc = self:IsOwnerNPC(owner)
 	local eyeDir = owner:GetAimVector():Angle()
 	if npc then
 		local enemy = owner:GetEnemy()
@@ -632,12 +632,12 @@ end)
 ]]
 
 function SWEP:GetAccuracyFloat()
-    if not IsValid(self:GetOwner()) then return 0 end
     local owner = self:GetOwner()
+    if not IsValid(owner) then return 0 end
     local acc = self.Accuracy
     local spread = acc.Spread
 	local walkSpeed = 80
-	if not owner:IsNPC() then walkSpeed = owner:GetWalkSpeed() end
+	if not self:IsOwnerNPC(owner) then walkSpeed = owner:GetWalkSpeed() end
 	if self.Shotgun then return spread end
 
     if not owner:OnGround() and owner:GetMoveType() != MOVETYPE_NOCLIP then
@@ -648,7 +648,7 @@ function SWEP:GetAccuracyFloat()
 
 	end
 
-	if not owner:IsNPC() then		
+	if not self:IsOwnerNPC(Owner) then		
 		if owner:Crouching() then
 			spread = spread + acc.Crouch 
 	
@@ -665,7 +665,7 @@ end
 
 -- There are alot of magic numbers here but I literally don't know how CS:S does it so its all perceptive.
 function SWEP:ViewPunch(owner,angle)
-	if owner:IsNPC() then return end
+	if self:IsOwnerNPC(owner) then return end
 	if not self.Recoil or noViewPunch then return end
 
 	local viewPunch = Angle(angle.x,angle.y,0)
@@ -690,7 +690,7 @@ function SWEP:DoRecoil(noViewPunch)
     local owner = self:GetOwner()
 	if noViewPunch == nil then noViewPunch = false end
 
-    if not IsValid(owner) or owner:IsNPC() then return angle_zero end
+    if not IsValid(owner) or self:IsOwnerNPC(owner) then return angle_zero end
 
 	if self.SprayPattern[1] == "none" then self:ViewPunch(owner,angle_zero) return angle_zero end
 
@@ -817,7 +817,7 @@ function SWEP:ResetScoping(returnAfterShot)
 		self:SetAccuracy("AccuracyUnScoped")
 	end
 	local owner = self:GetOwner()
-    if IsValid(owner) and not owner:IsNPC() then
+    if IsValid(owner) and not self:IsOwnerNPC(owner) then
         owner:SetFOV(0,self.ScopingTime)
 		if returnAfterShot then
 			self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)

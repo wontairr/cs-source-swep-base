@@ -194,13 +194,19 @@ function SWEP:FireAnimationEvent( pos, ang, event, options )
 
 end
 
+function SWEP:IsOwnerNPC(owner)
+	if owner == nil then owner = self:GetOwner() end
+	if not IsValid(owner) then return false end
+	return owner:IsNPC() or owner.isTerminatorHunterBased
+end
+
 function SWEP:ResetVariables(dontResetDropped,dontClearSafeTimers)
 	self:ResetScoping()
 	self.Equipped = false
 	self.ShotgunReloading = false
 
 	local owner = self:GetOwner()
-	if IsValid(owner) and not owner:IsNPC() then
+	if IsValid(owner) and not self:IsOwnerNPC(owner) then
 		owner:SetCanZoom(true)
 		if SERVER then
 			local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
