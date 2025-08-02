@@ -870,6 +870,7 @@ end
 ]]
 
 -- Classic CSS Viewbob.
+
 function SWEP:CalcViewModelView(vm,oldPos,oldAng,pos,ang)
     local owner = self:GetOwner()
     if not IsValid(owner) then return end
@@ -888,7 +889,9 @@ function SWEP:CalcViewModelView(vm,oldPos,oldAng,pos,ang)
 
 	if viewSway < 1 then
 		if self.UseHands and CSSClientConvars.weapons_carms_adjust:GetBool() then
-			return pos + add,ang + self.CArmsSettings.offsetAng
+			pos:Add(add)
+			ang:Add(self.CArmsSettings.offsetAng)
+			return pos,ang
 		end
 		return
 	end
@@ -919,8 +922,14 @@ function SWEP:CalcViewModelView(vm,oldPos,oldAng,pos,ang)
 	newPos = LerpVector(self.ViewBobData.CurOwnerSpeedPercentage,pos,newPos)
 
 	if self.UseHands and CSSClientConvars.weapons_carms_adjust:GetBool() then
-		if viewSway == 2 then return oldPos + add,oldAng + self.CArmsSettings.offsetAng end
-		return newPos + add,oldAng + self.CArmsSettings.offsetAng
+		if viewSway == 2 then
+			oldPos:Add(add)
+			oldAng:Add(self.CArmsSettings.offsetAng)
+			return oldPos,oldAng
+		end
+		newPos:Add(add)
+		oldAng:Add(self.CArmsSettings.offsetAng)
+		return newPos,oldAng
 	end
 
 	if viewSway == 2 then return oldPos,oldAng end
