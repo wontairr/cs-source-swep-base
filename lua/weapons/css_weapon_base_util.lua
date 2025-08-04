@@ -11,7 +11,7 @@ if CLIENT then
             "CSweapons",   
             x + wide / 2,     
             y + tall / 2,    
-            Color(255, 189, 0, alpha),
+            Color(255, 181, 21, alpha),
             TEXT_ALIGN_CENTER,
             TEXT_ALIGN_CENTER
         )

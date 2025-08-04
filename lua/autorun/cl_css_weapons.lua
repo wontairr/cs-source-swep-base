@@ -43,7 +43,7 @@ end,"css_cl_lefthand_change")
 
 surface.CreateFont("CSweapons",{
     font = "cs",
-    size = 150,
+    size = 170,
 	weight = 100,
 	antialias = true,
 	outline = false
