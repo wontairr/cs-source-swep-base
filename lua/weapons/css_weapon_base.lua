@@ -521,7 +521,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 			self:BulletCallback(att,tr,dmginfo)
 		end
 	else
-		bullet.Callback = self.BulletCallback
+		bullet.Callback = function(att,tr,dmginfo) self:BulletCallback(att,tr,dmginfo) end
 	end
 	
 	owner:FireBullets( bullet )
