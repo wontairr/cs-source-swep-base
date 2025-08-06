@@ -77,14 +77,22 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
             panel:CheckBox("Compatibility Mode (Requires Reload)",cmd)
             panel:Help(" ")
         end
+
         cmd = "css_sv_weapons_use_arms"
         MakeHelp(true)
         panel:CheckBox("Use C-Arms (Requires Reload)",cmd)
         panel:Help(" ")
+
         cmd = "css_sv_weapons_sandbox_slots"
         MakeHelp(true)
         panel:CheckBox("Sandbox Slots (Requires Reload)",cmd)
         panel:Help(" ")
+
+        cmd = "css_sv_weapons_use_css_ammo"
+        MakeHelp(true)
+        panel:CheckBox("Use CS:S Ammo (Requires Reload)",cmd)
+        panel:Help(" ")
+
         cmd = "css_sv_weapons_pistols_automatic"
         MakeHelp(true)
         panel:CheckBox("Automatic Pistols (Requires Reload)",cmd)

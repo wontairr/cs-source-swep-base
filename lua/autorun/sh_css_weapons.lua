@@ -59,6 +59,11 @@ CSSServerConvars = {
     weapons_carms                   = CreateConVar("css_sv_weapons_use_arms","0",ARCHIVED_REPLICATED,
     "If set to 1, the viewmodels will use C Arms (Arms of your playermodel) NOTE: These look worse/have animation issues."),
 
+    weapons_real_ammo                   = CreateConVar("css_sv_weapons_use_css_ammo","0",ARCHIVED_REPLICATED,
+    "If set to 1, weapons that support it will use CS:S ammo types instead of HL2 ammo types."),
+
+    
+
     weapons_spray_debug             = CreateConVar("css_sv_debug_weapon_spray","0",ARCHIVED_REPLICATED,
     "If set to 1, weapons will show debugging visuals for the spray pattern/bullet direction.",0,1),
 
@@ -105,9 +110,7 @@ CSSServerConvars = {
     "Maximum blind color alpha.",0,255),
 }
 
-cvars.AddChangeCallback("css_sv_weapons_use_arms",function()
-    MsgC(Color(255,0,0),"css_sv_weapons_use_arms: You have to restart/change the map for the changes to take effect!\n")
-end,"css_sv_use_arms_change")
+
 
 
 function CSS_Viewmodel(default_path)
@@ -132,6 +135,8 @@ function CSS_ShrinkSprayPattern(sprayPattern,factor,createNewAngles)
 end
 
 function CSS_UsingArms() return CSSServerConvars.weapons_carms:GetBool() end
+-- Usage: SWEP.Primary.Ammo = CSS_GetAmmo("ar2","BULLET_PLAYER_762MM").
+function CSS_GetAmmo(hl2ammo,cssammo) return CSSServerConvars.weapons_real_ammo:GetBool() and cssammo or hl2ammo end
 
 
 CSS_Rifle   = 1
@@ -165,6 +170,11 @@ function CSS_SelectSlot(gunType)
     return 0
 end
 
+
+cvars.AddChangeCallback("css_sv_weapons_use_arms",function()
+    MsgC(Color(255,0,0),"css_sv_weapons_use_arms: You have to restart/change the map for the changes to take effect!\n")
+end,"css_sv_use_arms_change")
+
 cvars.AddChangeCallback("css_sv_weapons_pistols_automatic",function()
     MsgC(Color(255,0,0),"css_sv_weapons_pistols_automatic: You have to restart/change the map for the changes to take effect!\n")
 end,"css_sv_pistols_change")
@@ -172,6 +182,10 @@ end,"css_sv_pistols_change")
 cvars.AddChangeCallback("css_sv_weapons_sandbox_slots",function()
     MsgC(Color(255,0,0),"css_sv_weapons_sandbox_slots: You have to restart/change the map for the changes to take effect!\n")
 end,"css_sv_slots_change")
+
+cvars.AddChangeCallback("css_sv_weapons_use_css_ammo",function()
+    MsgC(Color(255,0,0),"css_sv_weapons_use_css_ammo: You have to restart/change the map for the changes to take effect!\n")
+end,"css_sv_ammo_change")
 
 cvars.AddChangeCallback("css_sv_debug_weapon_spray",function(c,o,n)
     if tobool(n) then
