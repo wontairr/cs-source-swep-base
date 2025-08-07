@@ -24,16 +24,18 @@ function ENT:Initialize()
         self:SetTrigger(true)
     end
     self:UseTriggerBounds(true,24)
-
+    self:AddEFlags( EFL_FORCE_CHECK_TRANSMIT )
 end
 
 function ENT:Touch(ent)
     if CLIENT or self.PickedUp then return end
     self.PickedUp = true 
     if ent:IsPlayer() then
+        ent:GiveAmmo(self.Amount,self.Ammo,false)
         if not self:IsMarkedForDeletion() then
-            ent:GiveAmmo(self.Amount,self.Ammo,false)
             self:Remove()
         end
     end
 end
+
+function ENT:UpdateTransmitState() return TRANSMIT_ALWAYS end
