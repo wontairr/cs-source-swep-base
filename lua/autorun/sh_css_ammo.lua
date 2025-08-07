@@ -198,7 +198,7 @@ registerAmmo(
 registerAmmo(
     "ammo_45acp",
     ".57",
-    "BULLET_PLAYER_57MM",
+    "BULLET_PLAYER_45ACP",
     40,
     Model("models/Items/BoxSRounds.mdl")
 )
