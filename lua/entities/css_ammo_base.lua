@@ -29,8 +29,8 @@ end
 
 function ENT:Touch(ent)
     if CLIENT or self.PickedUp then return end
-    self.PickedUp = true 
     if ent:IsPlayer() then
+        self.PickedUp = true 
         ent:GiveAmmo(self.Amount,self.Ammo,false)
         if not self:IsMarkedForDeletion() then
             self:Remove()
