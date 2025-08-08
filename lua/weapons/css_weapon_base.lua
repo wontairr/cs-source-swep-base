@@ -93,7 +93,7 @@ function SWEP:Think()
 	end
 
 	-- Reload on releasing left click
-	if owner:KeyReleased(IN_ATTACK) and self:Clip1() <= 0 then
+	if owner:KeyReleased(IN_ATTACK) and self:Clip1() <= 0 and CurTime() > self:GetNextPrimaryFire() then
 		self:Reload(2)
 	end
 
