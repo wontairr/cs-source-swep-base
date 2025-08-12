@@ -1,4 +1,5 @@
 if SERVER then AddCSLuaFile() AddCSLuaFile("weapons/css_weapon_base_vars.lua") AddCSLuaFile("weapons/css_weapon_base_util.lua") end
+local devmode = GetConVar("developer")
 
 SWEP.Base = "weapon_base"
 SWEP.CSSWeapon = true 
@@ -94,6 +95,7 @@ function SWEP:Think()
 
 	-- Reload on releasing left click
 	if owner:KeyReleased(IN_ATTACK) and self:Clip1() <= 0 and CurTime() > self:GetNextPrimaryFire() then
+		if devmode:GetBool() then print("CSS: Reloading after releasing left click. (time: " .. tostring(CurTime()) .. ")") end
 		self:Reload(2)
 	end
 
@@ -356,6 +358,7 @@ function SWEP:CanPrimaryAttack()
 				self:EmitSound( "Default.ClipEmpty_Rifle" )
 			end
 			if self:Ammo1() > 0 then
+				if devmode:GetBool() then print("CSS: Reloading after clicking when clip is out of bullets. (time: " .. tostring(CurTime()) .. ")") end
 				self:Reload(1)
 			end
 			self:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
@@ -592,6 +595,7 @@ function SWEP:CanReload(override)
 end
 
 function SWEP:Reload(override)
+	if devmode:GetBool() then print("CSS: Reload called with override number: " .. tostring(override) .. " (nil is default pressing r, time: " .. tostring(CurTime()) .. ")") end
 	if not self:CanReload(override) then return end
 
 	self:ResetScoping()
