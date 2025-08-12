@@ -201,7 +201,11 @@ function SWEP:Equip(owner)
 
 	if SERVER and not self:GetBeenPickedUp() then
 		if not self:IsOwnerNPC(owner) and engine.ActiveGamemode() == "sandbox" and CSSServerConvars.weapons_give_ammo_sandbox:GetBool() then
-			owner:GiveAmmo(self.Primary.DefaultClip,self.Primary.Ammo,false)
+			if CSSServerConvars.weapons_real_ammo:GetBool() then
+				owner:GiveAmmo(game.GetAmmoMax(game.GetAmmoID(self.Primary.Ammo)),self.Primary.Ammo,false)
+			else
+				owner:GiveAmmo(self.Primary.DefaultClip,self.Primary.Ammo,false)
+			end
 		end
 		self:SetBeenPickedUp(true)
 	end
