@@ -48,7 +48,7 @@ CSSServerConvars = {
     weapons_sniper_unscopeaftershot = CreateConVar("css_sv_weapons_sniper_unscope_aftershot","1",ARCHIVED_REPLICATED,
     "Enables snipers unscoping after a shot.",0,1),
     weapons_give_ammo_sandbox       = CreateConVar("css_sv_sandbox_weapons_give_ammo","1",ARCHIVED_REPLICATED,
-    "Makes weapons give a little reserve ammo when spawning them in Sandbox.",0,1),
+    "Makes weapons give a little reserve ammo when spawning them in.",0,1),
     weapons_infinite_grenades       = CreateConVar("css_sv_weapons_infinite_grenades","0",ARCHIVED_REPLICATED,
     "Grenades wont be removed when thrown if set to 1.",0,1),
     weapons_pistols_automatic       = CreateConVar("css_sv_weapons_pistols_automatic","0",ARCHIVED_REPLICATED,
