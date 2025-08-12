@@ -1,3 +1,17 @@
+local function ammoConVar(name,max)
+	CreateConVar(name,max,FCVAR_REPLICATED,"")
+end
+ammoConVar("ammo_50AE_max",35)
+ammoConVar("ammo_762mm_max",90)
+ammoConVar("ammo_556mm_max",90)
+ammoConVar("ammo_556mm_box_max",200)
+ammoConVar("ammo_338mag_max",30)
+ammoConVar("ammo_9mm_max",120)
+ammoConVar("ammo_buckshot_max",32)
+ammoConVar("ammo_45acp_max",100)
+ammoConVar("ammo_357sig_max",52)
+ammoConVar("ammo_57mm_max",100)
+
 game.AddAmmoType({
 	name = "BULLET_PLAYER_50AE", 
 	dmgtype = DMG_BULLET, 
@@ -5,7 +19,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2400,
-	maxcarry = 0,
+	maxcarry = "ammo_50ae_max",
 	minsplash = 10,
 	maxsplash = 14
 })
@@ -16,7 +30,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2400,
-	maxcarry = 0,
+	maxcarry = "ammo_762mm_max",
 	minsplash = 10,
 	maxsplash = 14
 })
@@ -27,7 +41,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2400,
-	maxcarry = 0,
+	maxcarry = "ammo_556mm_max",
 	minsplash = 10,
 	maxsplash = 14
 })
@@ -38,7 +52,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2400,
-	maxcarry = 0,
+	maxcarry = "ammo_556mm_box_max",
 	minsplash = 10,
 	maxsplash = 14
 })
@@ -50,7 +64,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2800,
-	maxcarry = 0,
+	maxcarry = "ammo_338mag_max",
 	minsplash = 12,
 	maxsplash = 16
 })
@@ -62,7 +76,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2000,
-	maxcarry = 0,
+	maxcarry = "ammo_9mm_max",
 	minsplash = 5,
 	maxsplash = 10
 })
@@ -73,7 +87,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 600,
-	maxcarry = 0,
+	maxcarry = "ammo_buckshot_max",
 	minsplash = 3,
 	maxsplash = 6
 })
@@ -84,7 +98,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2100,
-	maxcarry = 0,
+	maxcarry = "ammo_45acp_max",
 	minsplash = 6,
 	maxsplash = 10
 })
@@ -95,7 +109,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2000,
-	maxcarry = 0,
+	maxcarry = "ammo_357sig_max",
 	minsplash = 4,
 	maxsplash = 8
 })
@@ -106,7 +120,7 @@ game.AddAmmoType({
 	plydmg = 0, -- This can either be a number or a ConVar name.
 	npcdmg = 0, -- Ditto.
 	force = 2000,
-	maxcarry = 0,
+	maxcarry = "ammo_57mm_max",
 	minsplash = 4,
 	maxsplash = 8
 })
