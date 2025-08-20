@@ -998,3 +998,98 @@ function SWEP:DrawHUDBackground()
 		surface.DrawTexturedRect(cx, cy, size, size)
 	end
 end
+
+if engine.ActiveGamemode() == "terrortown" then
+		---- TTT SPECIAL EQUIPMENT FIELDS
+
+	-- This must be set to one of the WEAPON_ types in TTT weapons for weapon
+	-- carrying limits to work properly. See /gamemode/shared.lua for all possible
+	-- weapon categories.
+	SWEP.Kind = WEAPON_HEAVY
+
+	-- If CanBuy is a table that contains ROLE_TRAITOR and/or ROLE_DETECTIVE, those
+	-- players are allowed to purchase it and it will appear in their Equipment Menu
+	-- for that purpose. If CanBuy is nil this weapon cannot be bought.
+	--   Example: SWEP.CanBuy = { ROLE_TRAITOR }
+	-- (just setting to nil here to document its existence, don't make this buyable)
+	SWEP.CanBuy = nil
+
+	if CLIENT then
+	-- If this is a buyable weapon (ie. CanBuy is not nil) EquipMenuData must be
+	-- a table containing some information to show in the Equipment Menu. See
+	-- default equipment weapons for real-world examples.
+	SWEP.EquipMenuData = nil
+
+	-- Example data:
+	-- SWEP.EquipMenuData = {
+	--
+	---- Type tells players if it's a weapon or item
+	--     type = "Weapon",
+	--
+	---- Desc is the description in the menu. Needs manual linebreaks (via \n).
+	--     desc = "Text."
+	-- };
+
+	-- This sets the icon shown for the weapon in the DNA sampler, search window,
+	-- equipment menu (if buyable), etc.
+	SWEP.Icon = "vgui/ttt/icon_nades" -- most generic icon I guess
+
+	-- You can make your own weapon icon using the template in:
+	--   /garrysmod/gamemodes/terrortown/template/
+
+	-- Open one of TTT's icons with VTFEdit to see what kind of settings to use
+	-- when exporting to VTF. Once you have a VTF and VMT, you can
+	-- resource.AddFile("materials/vgui/...") them here. GIVE YOUR ICON A UNIQUE
+	-- FILENAME, or it WILL be overwritten by other servers! Gmod does not check
+	-- if the files are different, it only looks at the name. I recommend you
+	-- create your own directory so that this does not happen,
+	-- eg. /materials/vgui/ttt/mycoolserver/mygun.vmt
+	end
+
+	---- MISC TTT-SPECIFIC BEHAVIOUR CONFIGURATION
+
+	-- ALL weapons in TTT must have weapon_tttbase as their SWEP.Base. It provides
+	-- some functions that TTT expects, and you will get errors without them.
+	-- Of course this is weapon_tttbase itself, so I comment this out here.
+	--  SWEP.Base = "weapon_tttbase"
+
+	-- If true AND SWEP.Kind is not WEAPON_EQUIP, then this gun can be spawned as
+	-- random weapon by a ttt_random_weapon entity.
+	SWEP.AutoSpawnable = true
+
+	-- Set to true if weapon can be manually dropped by players (with Q)
+	SWEP.AllowDrop = false
+
+	-- Set to true if weapon kills silently (no death scream)
+	SWEP.IsSilent = false
+
+	SWEP.IsGrenade = false
+
+	SWEP.fingerprints = {}
+
+	SWEP.AmmoEnt = "item_ammo_smg1_ttt"
+
+	SWEP.IronSightsPos = Vector(0,0,0)
+	SWEP.IronSightsAng = Vector(0,0,0)
+
+	function SWEP:AddHUDHelp(primary_text, secondary_text, translate, extra_params)
+		extra_params = extra_params or {}
+
+		self.HUDHelp = {
+			primary = primary_text,
+			secondary = secondary_text,
+			translatable = translate,
+			translate_params = table.Merge(extra_params, default_key_params)
+		};
+	end
+
+	function SWEP:IsEquipment()
+	return false
+	end
+	function SWEP:OnRestore()
+		self:ResetVariables()
+	end
+	function SWEP:WasBought(buyer)
+	end
+
+end

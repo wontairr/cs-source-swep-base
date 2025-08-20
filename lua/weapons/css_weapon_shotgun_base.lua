@@ -3,6 +3,10 @@ SWEP.Shotgun = true
 SWEP.Type = CSS_Shotgun
 SWEP.Slot = CSS_SelectSlot(SWEP.Type)
 
+if engine.ActiveGamemode() == "terrortown" then
+	SWEP.AmmoEnt = "item_box_buckshot_ttt"
+end
+
 function SWEP:Reload()
 	self:ShotgunReload()
 end
