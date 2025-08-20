@@ -464,8 +464,9 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 		local enemy = owner:GetEnemy()
 		if IsValid(enemy) then
 			local dir = enemy:GetPos()
-			dir:Add(eyeMargin)
-			dir:Sub(owner:GetPos())
+		
+			dir:Add(enemy:GetViewOffset())
+			dir:Sub(owner:EyePos())
 			dir:Normalize()
 			eyeDir = LerpAngle(1.0 - CSSServerConvars.weapons_npc_accuracy:GetFloat(),dir:Angle(),eyeDir)
 		end
