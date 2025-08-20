@@ -78,7 +78,11 @@ function SWEP:Think()
 	if not IsValid(owner) then return end
 	-- Drop
 	if CLIENT then
-		if not self.DontDrop and owner == LocalPlayer() and input.IsButtonDown(CSSClientConvars.drop_bind:GetInt()) 
+		local button = CSSClientConvars.drop_bind:GetInt()
+		if engine.ActiveGamemode() == "terrortown" then
+			button = KEY_Q
+		end
+		if not self.DontDrop and owner == LocalPlayer() and input.IsButtonDown(button)  
 		and not self:GetOwner():IsTyping() and not gui.IsConsoleVisible() and not self:GetDropped() then
 			self:SetDropped(true)
 			net.Start("toServer_CSSDropWeapon")
