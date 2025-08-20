@@ -452,8 +452,7 @@ local damageMultiplier = {
 	CSSServerConvars.weapons_shotgun_damage_multiplier,
 	CSSServerConvars.weapons_sniper_damage_multiplier,
 } 
--- This helps with NPC aiming (i hope)
-local eyeMargin = Vector(0,0,10)
+
 function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst, ammo_type, force, tracer)
 	
 	local owner = self:GetOwner()
