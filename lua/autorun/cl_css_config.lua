@@ -122,7 +122,12 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         MakeHelp(true)
         panel:CheckBox("Give ammo on pickup",cmd)
         panel:Help(" ")
+        cmd = "css_sv_weapons_disable_zoom"
+        MakeHelp(true)
+        panel:CheckBox("Disable HL2 Zoom",cmd)
+        panel:Help(" ")
         panel:Help("----")
+
 
         cmd = "css_sv_weapons_damage_multiplier"
         MakeHelp()

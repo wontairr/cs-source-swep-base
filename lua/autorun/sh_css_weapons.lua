@@ -104,6 +104,10 @@ CSSServerConvars = {
     weapons_player_slowing          = CreateConVar("css_sv_weapons_player_slowing","0",ARCHIVED_REPLICATED,
     "If set to 1, player movement speed will be affected by whatever weapon they're holding. If set to 2, sprinting speed will be clamped to walking speed.",0,2),
 
+    weapons_disable_zoom             = CreateConVar("css_sv_weapons_disable_zoom","1",ARCHIVED_REPLICATED,
+    "If set to 1, players wont be able to use +zoom when holding css weapons.",0,1),
+
+
     flashbang_blindtime_multiplier  = CreateConVar("css_sv_flashbang_blindtime_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier for the blind time of the flashbang.",0.0,1.0),
     flashbang_blind_maxalpha        = CreateConVar("css_sv_flashbang_blind_maxalpha","255",ARCHIVED_REPLICATED,

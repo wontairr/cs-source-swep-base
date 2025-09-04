@@ -254,16 +254,23 @@ function SWEP:Deploy()
 	self:SendWeaponAnim(self:GetSilenced() and ACT_VM_DRAW_SILENCED or ACT_VM_DRAW)
 	local owner = self:GetOwner()
 	if IsValid(owner) and not self:IsOwnerNPC(owner) then
-		owner:SetCanZoom(false)
+		
+		if CSSServerConvars.weapons_disable_zoom:GetBool() then
+			owner:SetCanZoom(false)
+		end
+
 		self.OGWalkSpeed = owner:GetWalkSpeed()
 		self.OGRunSpeed = owner:GetRunSpeed()
+		
 		local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
+		
 		if speedType == 1 then
 			owner:SetWalkSpeed(self.MaxPlayerSpeed)
 		elseif speedType == 2 then
 			owner:SetWalkSpeed(self.MaxPlayerSpeed)
 			owner:SetRunSpeed(self.MaxPlayerSpeed)
 		end
+
 	end
 	if self.DeploySound and SERVER then
 		local filter = RecipientFilter()
