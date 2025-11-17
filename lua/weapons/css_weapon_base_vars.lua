@@ -10,7 +10,11 @@ SWEP.Primary.Bullets 	= 1
 SWEP.Primary.BulletTake = 1
 SWEP.Primary.Delay  	= 0.1
 SWEP.Primary.Damage 	= 36
-SWEP.Primary.Force		= 10
+if CSSServerConvars.weapons_real_ammo:GetBool() then
+	SWEP.Primary.Force = 3
+else
+	SWEP.Primary.Force = 10
+end
 SWEP.Primary.Distance   = 8192
 
 SWEP.Secondary.Ammo         = "none"
