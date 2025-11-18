@@ -156,10 +156,11 @@ function SWEP:SetupDataTables()
 	self:NetworkVar("Int","Event")
 	self:NetworkVar("Float","EventTime")
 
+
 	self:SetupMoreDataTables()
 end
+-- Override this instead of the one above.
+function SWEP:SetupMoreDataTables() end
 
 function SWEP:InitializeNetworkVars() end
 
--- Override this instead of the one above.
-function SWEP:SetupMoreDataTables() end
