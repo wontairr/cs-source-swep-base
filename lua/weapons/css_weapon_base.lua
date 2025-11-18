@@ -43,7 +43,9 @@ SWEP.DrawWeaponInfoBox = false
 SWEP.SwayScale = 0.5
 SWEP.OGWalkSpeed = 200
 SWEP.OGRunSpeed  = 240
-
+SWEP.OGDuckSpeed = 0.3
+SWEP.OGUnduckSpeed = 0.3
+SWEP.OGDuckOffset = Vector(0,0,28)
 
 include("weapons/css_weapon_base_vars.lua")
 --[[
@@ -261,7 +263,10 @@ function SWEP:Deploy()
 
 		self.OGWalkSpeed = owner:GetWalkSpeed()
 		self.OGRunSpeed = owner:GetRunSpeed()
-		
+		self.OGDuckSpeed = owner:GetDuckSpeed()
+		self.OGUnduckSpeed = owner:GetUnDuckSpeed()
+		self.OGDuckOffset = owner:GetViewOffsetDucked()
+
 		local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
 		
 		if speedType == 1 then
@@ -269,6 +274,9 @@ function SWEP:Deploy()
 		elseif speedType == 2 then
 			owner:SetWalkSpeed(self.MaxPlayerSpeed)
 			owner:SetRunSpeed(self.MaxPlayerSpeed * 0.52)
+			owner:SetDuckSpeed(0.4)
+			owner:SetUnDuckSpeed(0.2)
+			owner:SetViewOffsetDucked(Vector(0,0,47))
 		end
 
 	end

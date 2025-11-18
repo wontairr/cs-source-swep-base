@@ -217,6 +217,9 @@ function SWEP:ResetVariables(dontResetDropped,dontClearSafeTimers)
 			elseif speedType == 2 then
 				owner:SetWalkSpeed(self.OGWalkSpeed)
 				owner:SetRunSpeed(self.OGRunSpeed)
+				owner:SetDuckSpeed(self.OGDuckSpeed)
+				owner:SetUnDuckSpeed(self.OGUnduckSpeed)
+				owner:SetViewOffsetDucked(self.OGDuckOffset)
 			end
 		end
 	end
