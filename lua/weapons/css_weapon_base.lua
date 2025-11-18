@@ -310,6 +310,7 @@ function SWEP:Drop(ownerOverride)
 	self:ResetVariables()
 	self:SetEvent(-1) -- cancel events
 
+	
 	local owner = nil 
 	if ownerOverride != nil then owner = ownerOverride else owner = self:GetOwner() end
 	if not IsValid(owner) then return end
@@ -324,7 +325,7 @@ function SWEP:Drop(ownerOverride)
 		me:SetOwner(owner)
 		me:SetClip1(self:Clip1())
 		me:SetClip2(self:Clip2())
-		me:SetSilenced(self:GetSilenced())
+		me:SetSilenced(self.DropSilenced or self:GetSilenced())
 		me:SetBurst(self:GetBurst())
 		me:SetBeenPickedUp(self:GetBeenPickedUp())
 		me:PhysWake()
@@ -336,13 +337,16 @@ function SWEP:Drop(ownerOverride)
 			phys:ApplyForceCenter(ownerVelocity)
 		end
 
-
+		me.DropSilenced = nil
+		self.DropSilenced = nil
+		
 		self:PostDrop(ownerOverride,me)
 		return
 	end
+	self:SetSilenced(self.DropSilenced or self:GetSilenced())
 	
 	owner:DropWeapon(self,nil,owner:GetAimVector():GetNormalized() * 200)
-
+	self.DropSilenced = nil
 	
 	local phys = self:GetPhysicsObject()
 	if IsValid(phys) then
@@ -583,7 +587,11 @@ end
 
 function SWEP:AttachSilencer()
 	self:SendAnimation(self:GetSilenced() and ACT_VM_DETACH_SILENCER or ACT_VM_ATTACH_SILENCER,PLAYER_RELOAD)
-
+	if not self:GetSilenced() then
+		self.DropSilenced = true
+	else
+		self.DropSilenced = nil
+	end
 	local nextTime = CurTime() + self:SequenceDuration()
 
 	self:SetNextSecondaryFire(nextTime)
