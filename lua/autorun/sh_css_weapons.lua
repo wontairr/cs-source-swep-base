@@ -105,7 +105,7 @@ CSSServerConvars = {
     "If set to 1, you can only hold one primary or secondary.",0,1),
 
     weapons_player_slowing          = CreateConVar("css_sv_weapons_player_slowing","0",ARCHIVED_REPLICATED,
-    "If set to 1, player movement speed will be affected by whatever weapon they're holding. If set to 2, sprinting speed will be clamped to walking speed.",0,2),
+    "If set to 1, player movement speed will be affected by whatever weapon they're holding. If set to 2, sprinting speed will be CS:S walk speed.",0,2),
 
     weapons_disable_zoom             = CreateConVar("css_sv_weapons_disable_zoom","1",ARCHIVED_REPLICATED,
     "If set to 1, players wont be able to use +zoom when holding css weapons.",0,1),

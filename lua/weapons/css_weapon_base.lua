@@ -268,7 +268,7 @@ function SWEP:Deploy()
 			owner:SetWalkSpeed(self.MaxPlayerSpeed)
 		elseif speedType == 2 then
 			owner:SetWalkSpeed(self.MaxPlayerSpeed)
-			owner:SetRunSpeed(self.MaxPlayerSpeed)
+			owner:SetRunSpeed(self.MaxPlayerSpeed * 0.52)
 		end
 
 	end
