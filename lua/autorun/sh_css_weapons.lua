@@ -67,6 +67,9 @@ CSSServerConvars = {
     weapons_spray_debug             = CreateConVar("css_sv_debug_weapon_spray","0",ARCHIVED_REPLICATED,
     "If set to 1, weapons will show debugging visuals for the spray pattern/bullet direction.",0,1),
 
+    weapons_damage_real_scale       = CreateConVar("css_sv_weapons_damage_css_scales","1",ARCHIVED_REPLICATED,
+    "If set to 1, weapon damage will use real CS:S damage scaling. (4x for head, 1.25x for stomach, etc.)"),
+
     weapons_damage_multiplier       = CreateConVar("css_sv_weapons_damage_multiplier","1",ARCHIVED_REPLICATED,
     "Multiplier of all weapon damage.",0,10),
 
@@ -211,3 +214,42 @@ hook.Add( "PlayerCanPickupWeapon", "CSSSinglePickup", function( ply, newWep )
         end
 	end
 end )
+
+hook.Add("ScaleNPCDamage","CSSScaleNPCDamage",function(npc,hitgroup,dmginfo)
+    if not CSSServerConvars.weapons_damage_real_scale:GetBool() then return end
+    if IsValid(npc) then
+        local att = dmginfo:GetAttacker()
+        if not IsValid(att) then return end
+        local wep = att:GetActiveWeapon()
+
+        if IsValid(wep) and not wep.CSSWeapon then return end
+        if hitgroup == HITGROUP_HEAD then
+            dmginfo:ScaleDamage(4)
+        elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+            dmginfo:ScaleDamage(0.75)
+        elseif hitgroup == HITGROUP_STOMACH then
+            dmginfo:ScaleDamage(1.25)
+        end
+
+        return true
+    end
+end)
+hook.Add("ScalePlayerDamage","CSSScalePlayerDamage",function(ply,hitgroup,dmginfo)
+    if not CSSServerConvars.weapons_damage_real_scale:GetBool() then return end
+    if IsValid(ply) then
+        local att = dmginfo:GetAttacker()
+        if not IsValid(att) then return end
+        local wep = att:GetActiveWeapon()
+
+        if IsValid(wep) and not wep.CSSWeapon then return end
+        if hitgroup == HITGROUP_HEAD then
+            dmginfo:ScaleDamage(4)
+        elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
+            dmginfo:ScaleDamage(0.75)
+        elseif hitgroup == HITGROUP_STOMACH then
+            dmginfo:ScaleDamage(1.25)
+        end
+
+        return true
+    end
+end)

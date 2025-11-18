@@ -128,11 +128,14 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         panel:Help(" ")
         panel:Help("----")
 
-
+        cmd = "css_sv_weapons_damage_css_scales"
+        MakeHelp(true)
+        panel:CheckBox("CS:S Damage Scaling",cmd)
+        panel:Help(" ")
         cmd = "css_sv_weapons_damage_multiplier"
         MakeHelp()
         panel:NumSlider("Damage Multiplier",cmd,0,10,2)
-        panel:Help(" ")
+        panel:Help(" ") 
         cmd = "css_sv_weapons_rifle_damage_multiplier"
         MakeHelp()
         panel:NumSlider("Rifle Damage Multiplier",cmd,0,10,2)
