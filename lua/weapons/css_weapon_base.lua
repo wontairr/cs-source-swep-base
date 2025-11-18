@@ -836,6 +836,8 @@ function SWEP:ResetScoping(returnAfterShot)
 
 	self.previousScopeLevel = self:GetScopingLevel()
 
+
+
 	self:SetScopingIn(false)
 	self:SetScopingLevel(0)
 
@@ -845,6 +847,13 @@ function SWEP:ResetScoping(returnAfterShot)
 	end
 	local owner = self:GetOwner()
     if IsValid(owner) and not self:IsOwnerNPC(owner) then
+		local slowing = CSSServerConvars.weapons_player_slowing:GetInt()
+		if slowing > 0 then
+			owner:SetWalkSpeed(self.MaxPlayerSpeed)
+			if slowing == 2 then
+				owner:SetRunSpeed(self.MaxPlayerSpeed * 0.52)
+			end
+		end
         owner:SetFOV(0,self.ScopingTime)
 		if returnAfterShot then
 			self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
@@ -869,13 +878,22 @@ function SWEP:Scope(overrideLevel)
     if self:GetScopingIn() == false or (self:GetScopingIn() and self:GetScopingLevel() < self.MaxScopingLevel ) then
 		local newLevel = (overrideLevel == nil and self:GetScopingLevel() + 1 or overrideLevel)
 		self:SetScopingLevel(newLevel)
-		
+
         owner:SetFOV(self.ScopeLevels[math.Clamp(self:GetScopingLevel(),1,99)], self.ScopingTime)
 		
         -- scope in if haven't yet
         if not self:GetScopingIn() then
 			self:SetScopingIn(true)
 			self:SetAccuracy("AccuracyScoped")
+		end
+		
+		local slowing = CSSServerConvars.weapons_player_slowing:GetInt()
+		if slowing > 0 then
+			owner:SetWalkSpeed((self.ScopeMoveSpeed or self.MaxPlayerSpeed))
+
+			if slowing == 2 then
+				owner:SetRunSpeed((self.ScopeMoveSpeed or self.MaxPlayerSpeed) * 0.52)
+			end
 		end
 
     -- If scoping in and have reached full scoping capacity then unscope.
