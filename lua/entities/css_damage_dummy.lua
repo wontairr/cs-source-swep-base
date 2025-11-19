@@ -77,11 +77,10 @@ local function CREATE_HOOKS()
         end
     end)
     hook.Add("PostEntityTakeDamage","CSSDamageDummy",function(ent,dmginfo,wasdamagetaken)
-        if IsValid(ent) and ent.damagedummy and IsValid(ent.damagedummy) then
+        if IsValid(ent) and ent.damagedummy and IsValid(ent.damagedummy) and dmginfo:GetDamage() >= 1 then
             debugoverlay.Sphere(dmginfo:GetDamagePosition(),3,1,red)
-            
             inserttext(dmginfo:GetDamage(),dmginfo:GetDamagePosition(),3)
-    
+            
         end
     end)
 end
@@ -107,8 +106,8 @@ function ENT:Initialize()
         self.rag:SetPos(self:GetPos())
         self.rag:SetAngles(self:GetAngles())
         self.rag:Spawn()
-        self.rag:SetMaxHealth(9999999999)
-        self.rag:SetHealth(9999999998)
+        self.rag:SetMaxHealth(9999)
+        self.rag:SetHealth(9999)
         self.rag.damagedummy = self
 
     end

@@ -46,6 +46,7 @@ SWEP.OGRunSpeed  = 240
 SWEP.OGDuckSpeed = 0.3
 SWEP.OGUnduckSpeed = 0.3
 SWEP.OGDuckOffset = Vector(0,0,28)
+SWEP.OGDuckHull = {Vector(-16,-16,0),Vector(16,16,36)}
 
 include("weapons/css_weapon_base_vars.lua")
 --[[
@@ -233,7 +234,13 @@ end
 -- Override.
 function SWEP:PostEquip(owner) end
 
-
+if CLIENT then
+	net.Receive("toClient_CSSUpdatePlayerHull",function()
+		net.ReadPlayer():SetHullDuck(net.ReadVector(),net.ReadVector())
+	end)
+else
+	util.AddNetworkString("toClient_CSSUpdatePlayerHull")
+end
 
 function SWEP:Deploy()
 	self.Equipped = true
@@ -266,6 +273,10 @@ function SWEP:Deploy()
 		self.OGDuckSpeed = owner:GetDuckSpeed()
 		self.OGUnduckSpeed = owner:GetUnDuckSpeed()
 		self.OGDuckOffset = owner:GetViewOffsetDucked()
+		local min,max = owner:GetHullDuck()
+		self.OGDuckHull[1] = min
+		self.OGDuckHull[2] = max
+		print(min)
 
 		local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
 		
@@ -277,6 +288,14 @@ function SWEP:Deploy()
 			owner:SetDuckSpeed(0.4)
 			owner:SetUnDuckSpeed(0.2)
 			owner:SetViewOffsetDucked(Vector(0,0,47))
+			owner:SetHullDuck(Vector(-16,-16,0),Vector(16,16,45))
+			if SERVER then
+				net.Start("toClient_CSSUpdatePlayerHull")
+				net.WritePlayer(owner)
+				net.WriteVector(self.OGDuckHull[1])
+				net.WriteVector(Vector(16,16,45))
+				net.Broadcast()
+			end
 		end
 
 	end
@@ -458,8 +477,159 @@ function SWEP:SetNextEmptyCheck(override)
 	self.NextEmptyCheck = override + self.SprayRecoverTime
 end
 
+
+local defaultPenetrateData = {
+	[CSS_Rifle] 		= 39,
+	[CSS_Pistol]		= 25,
+	[CSS_Smg]			= 15,
+	[CSS_Shotgun] 		= 1,
+	[CSS_Sniper] 		= 45,
+}
+
 -- Override.
-function SWEP:BulletCallback(attacker,tr,dmginfo) end
+function SWEP:PreBulletCallback(attacker,tr,dmginfo,bulletTbl,lastEntity) end
+function SWEP:PostBulletCallback(attacker,tr,dmginfo,bulletTbl,lastEntity) end
+
+
+
+
+function SWEP:BulletCallback(attacker,tr,dmginfo,bulletTbl)
+
+	self:PreBulletCallback(attacker,tr,dmginfo,bulletTbl)
+	local hitDist = tr.HitPos:Distance(bulletTbl.Src)
+	-- Penetration.
+	-- If hitdist isnt small and didnt hit the same ent as last penetrate.
+	if CSSServerConvars.weapons_penetration:GetBool() and bulletTbl.PenetrateNum < 10 and IsValid(attacker) and hitDist > 0.9999999999999 and not (bulletTbl.PenetrateNum > 1 and IsValid(tr.Entity) and bulletTbl.LastEntity == tr.Entity) then
+		
+		bulletTbl.LastEntity = tr.Entity
+		local typ = self.Type
+		-- Normalize the type.
+		if (typ == CSS_Admin or typ == CSS_Misc or typ == CSS_Utility) then
+			typ = CSS_Rifle
+		end
+		
+	
+		local thick = 0
+		local maxDist = 0
+		-- Change penetration thickness/max distance based on ammo.
+		if CSSServerConvars.weapons_real_ammo:GetBool() then
+			local ammo = self.Primary.Ammo
+
+			if ammo == "BULLET_PLAYER_50AE" then
+				thick = 30
+				maxDist = 1000.0
+			elseif ammo == "BULLET_PLAYER_762MM" then
+				thick = 39
+				maxDist = 5000.0
+			elseif ammo == "BULLET_PLAYER_556MM" or ammo == "BULLET_PLAYER_556MM_BOX" then
+				thick = 35
+				maxDist = 4000.0
+			elseif ammo == "BULLET_PLAYER_338MAG" then
+				thick = 45
+				maxDist = 8000.0
+			elseif ammo == "BULLET_PLAYER_9MM" then
+				thick = 21
+				maxDist = 800.0
+			elseif ammo == "BULLET_PLAYER_BUCKSHOT" then
+				thick = 0
+				maxDist = 0.0
+			elseif ammo == "BULLET_PLAYER_45ACP" then
+				thick = 15
+				maxDist = 500.0
+			elseif ammo == "BULLET_PLAYER_357SIG" then
+				thick = 25
+				maxDist = 800.0
+			elseif ammo == "BULLET_PLAYER_57MM" then
+				thick = 30
+				maxDist = 2000.0
+			end
+		else
+			thick = defaultPenetrateData[typ]
+		end
+		-- Change multipliers based on material
+		local mat = tr.MatType
+		local thickMult = 1.0
+		local damageMult = 1.0
+		if mat == MAT_METAL then
+			thickMult = 0.5
+			damageMult = 0.3
+		elseif mat == MAT_DIRT then
+			thickMult  = 0.5
+			damageMult = 0.3
+		elseif mat == MAT_CONCRETE then
+			thickMult  = 0.4
+			damageMult = 0.25
+		elseif mat == MAT_GRATE then
+			thickMult  = 1.0
+			damageMult = 0.99
+		elseif mat == MAT_VENT then
+			thickMult  = 1.0
+			damageMult = 0.45
+		elseif mat == MAT_TILE then
+			thickMult  = 0.65
+			damageMult = 0.30
+		elseif mat == MAT_COMPUTER then
+			thickMult  = 0.4
+			damageMult = 0.45
+		elseif mat == MAT_WOOD then
+			thickMult  = 1.0
+			damageMult = 0.6
+		else
+			thickMult  = 1.0
+			damageMult = 0.5
+		end
+		thick = thick * thickMult
+		thick = thick * CSSServerConvars.weapons_penetration_mult:GetFloat()
+		
+		
+		local tr2 = util.QuickTrace(bulletTbl.Src,bulletTbl.Dir * thick)
+
+		if tr2.FractionLeftSolid < 0.1 and thick > 0 and hitDist <= maxDist then
+	
+			local src = tr.HitPos + bulletTbl.Dir * thick
+
+			tr2 = util.TraceLine({
+				start = src,
+				endpos = tr.HitPos,
+				filter = {tr.Entity},
+				whitelist = true,
+				ignoreworld = tr.HitNonWorld
+			})
+		
+			-- Set the src back to the closest exit point
+
+			if tr2.Hit and tr2.Entity == tr.Entity then
+				src = tr2.HitPos
+			end
+			
+
+			local invDir = -bulletTbl.Dir
+			bulletTbl.Src = src
+			bulletTbl.Damage = bulletTbl.Damage * damageMult
+			bulletTbl.PenetrateNum = bulletTbl.PenetrateNum + 1
+			-- Fire new bullet with offset of however many units.
+			attacker:FireBullets(bulletTbl)
+			src:Sub(invDir)
+			-- Make hole on the other end.
+			if mat != MAT_GLASS then
+				attacker:FireBullets({
+					Num = 1,
+					Src = src,
+					Dir = invDir,
+					Distance = 45,
+					Damage = 0,
+					Force = 0.001,
+					AmmoType = bulletTbl.GetAmmoType,
+					Tracer = 0,
+				})
+			end
+
+		end
+		
+	
+	end
+	self:PostBulletCallback(attacker,tr,dmginfo,bulletTbl)
+end
 
 -- the colors and stuff is for debugging
 local green = Color(0,255,0,255)
@@ -500,6 +670,11 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 
 
     local bullet = {}
+	
+	-- Penetrate params
+	bullet.PenetrateNum = 0
+	bullet.LastEntity = nil 
+
     bullet.Num     	= num_bullets
 	bullet.Dir     	= eyeDir:Forward()  -- Affected by spray pattern
     bullet.Src     	= owner:GetShootPos()
@@ -551,7 +726,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 			self:BulletCallback(att,tr,dmginfo)
 		end
 	else
-		bullet.Callback = function(att,tr,dmginfo) self:BulletCallback(att,tr,dmginfo) end
+		bullet.Callback = function(att,tr,dmginfo) self:BulletCallback(att,tr,dmginfo,bullet) end
 	end
 	
 	owner:FireBullets( bullet )

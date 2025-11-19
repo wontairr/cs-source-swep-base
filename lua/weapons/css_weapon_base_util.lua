@@ -220,6 +220,14 @@ function SWEP:ResetVariables(dontResetDropped,dontClearSafeTimers)
 				owner:SetDuckSpeed(self.OGDuckSpeed)
 				owner:SetUnDuckSpeed(self.OGUnduckSpeed)
 				owner:SetViewOffsetDucked(self.OGDuckOffset)
+				owner:SetHullDuck(self.OGDuckHull[1],self.OGDuckHull[2])
+				if SERVER then
+					net.Start("toClient_CSSUpdatePlayerHull")
+						net.WritePlayer(owner)
+						net.WriteVector(self.OGDuckHull[1])
+						net.WriteVector(self.OGDuckHull[2])
+					net.Broadcast()
+				end
 			end
 		end
 	end

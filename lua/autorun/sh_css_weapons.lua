@@ -62,7 +62,10 @@ CSSServerConvars = {
     weapons_real_ammo                   = CreateConVar("css_sv_weapons_use_css_ammo","0",ARCHIVED_REPLICATED,
     "If set to 1, weapons that support it will use CS:S ammo types instead of HL2 ammo types."),
 
-    
+    weapons_penetration             = CreateConVar("css_sv_weapon_penetration","1",ARCHIVED_REPLICATED,
+    "If set to 1, weapons will penetrate through certain materials like wood."),
+    weapons_penetration_mult        = CreateConVar("css_sv_weapon_penetration_multiplier","1",ARCHIVED_REPLICATED,
+    "Multiplies the distance weapons can penetrate."),
 
     weapons_spray_debug             = CreateConVar("css_sv_debug_weapon_spray","0",ARCHIVED_REPLICATED,
     "If set to 1, weapons will show debugging visuals for the spray pattern/bullet direction.",0,1),

@@ -128,6 +128,18 @@ hook.Add("PopulateToolMenu", "CSSWeaponsMenu", function()
         panel:Help(" ")
         panel:Help("----")
 
+        cmd = "css_sv_weapon_penetration"
+        MakeHelp(true)
+        panel:CheckBox("Weapon Penetration",cmd)
+        panel:Help(" ")
+        cmd = "css_sv_weapon_penetration_multiplier"
+        MakeHelp()
+        panel:NumSlider("Penetration Multiplier",cmd,0.1,20,2)
+        panel:Help(" ") 
+
+       
+
+        panel:Help("----")
         cmd = "css_sv_weapons_damage_css_scales"
         MakeHelp(true)
         panel:CheckBox("CS:S Damage Scaling",cmd)
