@@ -243,8 +243,9 @@ hook.Add("ScalePlayerDamage","CSSScalePlayerDamage",function(ply,hitgroup,dmginf
         local att = dmginfo:GetAttacker()
         if not IsValid(att) then return end
         local wep = att:GetActiveWeapon()
-
+        
         if IsValid(wep) and not wep.CSSWeapon then return end
+    
         if hitgroup == HITGROUP_HEAD then
             dmginfo:ScaleDamage(4)
         elseif hitgroup == HITGROUP_LEFTLEG or hitgroup == HITGROUP_RIGHTLEG then
@@ -252,7 +253,5 @@ hook.Add("ScalePlayerDamage","CSSScalePlayerDamage",function(ply,hitgroup,dmginf
         elseif hitgroup == HITGROUP_STOMACH then
             dmginfo:ScaleDamage(1.25)
         end
-
-        return true
     end
 end)
