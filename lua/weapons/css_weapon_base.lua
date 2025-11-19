@@ -276,7 +276,6 @@ function SWEP:Deploy()
 		local min,max = owner:GetHullDuck()
 		self.OGDuckHull[1] = min
 		self.OGDuckHull[2] = max
-		print(min)
 
 		local speedType = CSSServerConvars.weapons_player_slowing:GetInt()
 		

@@ -17,6 +17,44 @@ util.AddNetworkString("toServer_CSSPlaySound")
 util.AddNetworkString("toServer_CSSRequestSpawn")
 util.AddNetworkString("toClient_CSSSelectWeapon")
 
+util.AddNetworkString("toClient_CSSNotifyUpdate")
+
+CSS_UpdateKnown = file.Exists("authentic_css_update.txt","DATA")
+
+
+local function IsBeforeDeadline()
+    local year  = tonumber(os.date("%Y"))
+    local month = tonumber(os.date("%m"))
+    local day   = tonumber(os.date("%d"))
+
+    -- Change the year if needed
+    local deadlineYear  = 2025
+    local deadlineMonth = 12
+    local deadlineDay   = 15
+
+    if year < deadlineYear then return true end
+    if year > deadlineYear then return false end
+
+    -- same year: compare month/day
+    if month < deadlineMonth then return true end
+    if month > deadlineMonth then return false end
+
+    -- same month
+    return day <= deadlineDay
+end
+hook.Add("Initialize","CSSUpdateNotifier",function()
+    if SERVER and IsBeforeDeadline() and not CSS_UpdateKnown then
+        timer.Simple(10,function()
+            file.Write("authentic_css_update.txt","1")
+            for _,ply in ipairs(player.GetAll()) do
+                net.Start("toClient_CSSNotifyUpdate")
+                net.WriteString("Hey! As of November 19th 2025, the mod has been updated to have bullet penetration! This means it will likely conflict with any other bullet penetration mod. This message will only appear once.")
+                net.Broadcast()
+            end
+        end)
+    end
+end)
+
 net.Receive("toServer_CSSRequestSpawn",function(len,ply)
     -- prevent this from being misused in another gamemode
     if engine.ActiveGamemode() != "sandbox" then return end

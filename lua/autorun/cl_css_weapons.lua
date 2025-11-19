@@ -1,5 +1,10 @@
 if SERVER then return end
 
+net.Receive("toClient_CSSNotifyUpdate",function()
+    local text = net.ReadString()
+    chat.AddText(Color(100,255,100),'[Authentic CS:S Base]: ' .. text)
+end)
+
 CSSClientConvars = {
 
 weapons_viewsway        = CreateClientConVar("css_cl_weapons_weaponsway","1",true,true,
