@@ -498,7 +498,12 @@ function SWEP:BulletCallback(attacker,tr,dmginfo,bulletTbl)
 	local hitDist = tr.HitPos:Distance(bulletTbl.Src)
 	-- Penetration.
 	-- If hitdist isnt small and didnt hit the same ent as last penetrate.
-	if CSSServerConvars.weapons_penetration:GetBool() and bulletTbl.PenetrateNum < 10 and IsValid(attacker) and hitDist > 0.9999999999999 and not (bulletTbl.PenetrateNum > 1 and IsValid(tr.Entity) and bulletTbl.LastEntity == tr.Entity) then
+	local entIsWorld = IsValid(tr.Entity) and tr.Entity:IsWorld()
+	local entityIsSame = !entIsWorld and tr.Entity == bulletTbl.LastEntity
+	local penetrateMoreThanOne = bulletTbl.PenetrateNum >= 1
+
+	if entityIsSame then self:PostBulletCallback(attacker,tr,dmginfo,bulletTbl) return end
+	if CSSServerConvars.weapons_penetration:GetBool() and bulletTbl.PenetrateNum < 10 and IsValid(attacker) and hitDist > 0.9999999999999 then
 		
 		bulletTbl.LastEntity = tr.Entity
 		local typ = self.Type
@@ -582,7 +587,7 @@ function SWEP:BulletCallback(attacker,tr,dmginfo,bulletTbl)
 		
 		
 		local tr2 = util.QuickTrace(bulletTbl.Src,bulletTbl.Dir * thick)
-
+	
 		if tr2.FractionLeftSolid < 0.1 and thick > 0 and hitDist <= maxDist then
 	
 			local src = tr.HitPos + bulletTbl.Dir * thick
@@ -606,6 +611,7 @@ function SWEP:BulletCallback(attacker,tr,dmginfo,bulletTbl)
 			bulletTbl.Src = src
 			bulletTbl.Damage = bulletTbl.Damage * damageMult
 			bulletTbl.PenetrateNum = bulletTbl.PenetrateNum + 1
+			bulletTbl.IgnoreEntity = tr.Entity
 			-- Fire new bullet with offset of however many units.
 			attacker:FireBullets(bulletTbl)
 			src:Sub(invDir)
