@@ -222,7 +222,7 @@ hook.Add("ScaleNPCDamage","CSSScaleNPCDamage",function(npc,hitgroup,dmginfo)
     if not CSSServerConvars.weapons_damage_real_scale:GetBool() then return end
     if IsValid(npc) then
         local att = dmginfo:GetAttacker()
-        if not IsValid(att) then return end
+        if not IsValid(att) or not att:IsNPC() or not att:IsPlayer() then return end
         local wep = att:GetActiveWeapon()
 
         if IsValid(wep) and not wep.CSSWeapon then return end
