@@ -733,7 +733,7 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone,direction,distance,burst
 				
 				
 			end
-			self:BulletCallback(att,tr,dmginfo)
+			self:BulletCallback(att,tr,dmginfo,bullet)
 		end
 	else
 		bullet.Callback = function(att,tr,dmginfo) self:BulletCallback(att,tr,dmginfo,bullet) end
