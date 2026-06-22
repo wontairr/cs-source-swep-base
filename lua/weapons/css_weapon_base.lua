@@ -861,7 +861,12 @@ function SWEP:GetAccuracyFloat()
 	if not self:IsOwnerNPC(owner) then walkSpeed = owner:GetWalkSpeed() end
 	if self.Shotgun then return spread end
 
-    if not owner:OnGround() and owner:GetMoveType() != MOVETYPE_NOCLIP and not owner:InVehicle() then
+	local inVehicle = false
+	if owner.InVehicle and owner:InVehicle() then
+		inVehicle = true
+	end
+
+    if not owner:OnGround() and owner:GetMoveType() != MOVETYPE_NOCLIP and not inVehicle then
 		spread = spread + acc.Jump
 	end
     if owner:GetVelocity():Length() >= walkSpeed/1.5 then
